@@ -1,0 +1,130 @@
+<Chat_multiple>:
+	insertion_text: insert_text
+	text_cu_in: text_cu
+	scroll_main: scroll_view
+
+	size_hint: None, None
+	pos_hint: {'center_x': .65, 'center_y': .5}
+	size: 400, 500
+	title: "Chat   " + root.number_users + " Users"
+	title_align: "center"
+	title_size: 30
+	title_color: [0, 153/255, 51/255, 1]
+	background: 'icons/Transparency.png'
+	background_color: 0, 0, 0, .9
+	separator_color: 1, 1, 1, .5
+
+	BoxLayout:
+    	orientation: 'vertical'
+		size_hint: 1, 1
+	    pos: self.pos
+
+		BoxLayout:
+	    	orientation: 'vertical'
+			size_hint: 1, 1
+		    pos: self.pos
+
+		    BoxLayout:
+		    	orientation: 'vertical'
+				size_hint: 1, .8
+			    pos: self.pos
+
+			    ScrollView:
+			    	id: scroll_view
+				    do_scroll_x: False
+				    bar_width: 3
+				    scroll_wheel_distance: 100
+		            effect_cls: "DampedScrollEffect"
+
+				    GridLayout:
+				    	id: insert_text
+				    	cols: 1
+				    	padding: 25,10,0,20
+				    	spacing: 0,15
+				    	orientation: 'vertical'
+						size_hint_y: None
+						height: self.minimum_height
+					    pos: self.pos
+
+			BoxLayout:
+		    	orientation: 'horizontal'
+				size_hint: 1, .08
+			    pos: self.pos
+
+			    TextInput:
+			    	multiline: False
+			    	id: text_cu
+			    	hint_text: "Type text here..."
+			    	hint_text_color: 1,1,1,0.7
+			    	cursor_color: 0,1,0,1
+			    	size_hint: .9, .8
+			    	background_color: 0, 0, 0, 0.1
+			    	foreground_color: 1,1,1,1
+			    	on_text_validate: root.send_msg(self.text)
+			    	on_focus: self.text = ""
+			    	on_focus: self.focus = True
+
+			    Button:
+			    	size_hint: .08, .85
+			    	background_normal: "icons/send_green.png"
+			    	background_down: "icons/send_blue.png"
+			    	on_press: root.send_msg(text_cu.text)
+			    	on_press: text_cu.focus = True
+
+<SmoothLabel>:
+    size_hint: None, None
+    size: self.texture_size
+    font_size: 18
+    background_color: 0,0,0,0
+    background_normal: ""
+    back_color: 1,0,1,1
+    border_radius: [5]
+    canvas.before:
+        Color:
+            rgba: 71/255, 71/255, 107/255,1 # This changes the label colour
+        RoundedRectangle:
+            size: self.size[0] + 16, self.size[1] + 10
+            pos: self.pos[0] - 8, self.pos[1] - 5
+            radius: self.border_radius
+
+<SmoothLabelMy>:
+    size_hint: None, None
+    size: self.texture_size
+    font_size: 18
+    background_color: 0,0,0,0
+    background_normal: ""
+    back_color: 1,0,1,1
+    border_radius: [5]
+    canvas.before:
+        Color:
+            rgba: 0, 153/255, 51/255,1 # This changes the label colour
+        RoundedRectangle:
+            size: 800 - self.pos[0] - self.padding_x - 2, self.size[1] + 10
+            pos: self.pos[0] + self.padding_x - 5, self.pos[1]  - 5
+            radius: self.border_radius
+
+<ManageClass>:
+	chat_but: cha_bu
+	
+	RelativeLayout:
+		size_hint: 1,1
+
+		Button:
+			id: cha_bu
+			size_hint: .08,.1
+			pos_hint: {'center_x': .5, 'center_y': .65}
+			background_normal: "icons/chat_inactive.png"
+			background_down: "icons/chat_inactive.png"
+			on_press: root.fire_popup()
+
+		Button:
+			text: "Connect to the server"
+			size_hint: .2,.1
+			pos_hint: {'center_x': .5, 'center_y': .5}
+			on_press: root.background_Thread_creation_listen()
+
+		Button:
+			text: "Create server"
+			size_hint: .2,.1
+			pos_hint: {'center_x': .5, 'center_y': .35}
+			on_press: root.server_thread()
